@@ -3,18 +3,30 @@ import path from 'path';
 import Message from '../models/message.js';
 import { uploadFileToSaveFiles } from '../utils/saveFilesHelper.js'; // Import the upload function
 import nodemailer from 'nodemailer';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Set up file upload destination and naming
-export const storage = multer.diskStorage({
+const storage = multer.diskStorage({
+  
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    const uploadPath = join(__dirname, "../uploads");
+    console.log(uploadPath);
+    cb(null, uploadPath);
+    // cb(null, 'C:\\Users\\nuell\\Downloads\\ds_projects\\chairwoman\\my_projects\\postpone_api_new\\postpone_api_new\\controllers');
+
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-export const upload = multer({ storage });
-
+export const upload = multer({
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
+});
 // Set up the email transporter
 export const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -25,7 +37,8 @@ export const transporter = nodemailer.createTransport({
 });
 
 // Handle the form submission
-export const handleFormSubmit = [upload.single('file'), async (req, res) => {
+// [upload.single('file'), 
+export const handleFormSubmit = async (req, res) => {
   const { title, message, duration, recipient } = req.body;
   const file = req.file;
 
@@ -67,4 +80,4 @@ export const handleFormSubmit = [upload.single('file'), async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to save or send message' });
   }
-}];
+};

@@ -16,7 +16,7 @@ const messageSchema = new mongoose.Schema({
     type: String, // Store recipient email address
     required: true
   },
-  scheduledAt: {
+  duration: {
     type: Date
   },
   createdAt: {

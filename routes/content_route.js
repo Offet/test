@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createContent, deleteContent, getContentById, updateContent } from "../controllers/content.js";
-import { remoteUpload } from "../middlewares/uploads.js";
+// import { remoteUpload } from "../middlewares/uploads.js";
 
 export const contentRouter = Router();
 
@@ -9,7 +9,7 @@ export const contentRouter = Router();
 // contentRouter.post("/allcontents", getcontents);
 
 // new code from theody
-contentRouter.post("/content", remoteUpload.single("contentData"), createContent);
+// contentRouter.post("/content", remoteUpload.single("contentData"), createContent);
 // Update your content router to also look like this
 
 contentRouter.get("/content:id", getContentById);
